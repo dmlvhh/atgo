@@ -1,29 +1,56 @@
 package main
 
 import (
+	"github.com/Dasongzi1366/AutoGo/app"
 	"github.com/Dasongzi1366/AutoGo/uiacc"
+	"log"
 )
 
-// com.taobao.idlefish
 func main() {
-	//测试环境为雷电模拟器安卓9 分辨率为手机版1080x1920
-	//创建一个节点操作的对象
 	a := uiacc.New()
-	////查找节点
-	//a.Id("com.taobao.idlefish:id/search_bar_layout").FindOnce().Click()
-	//ss := a.Index(3).FindOnce()
-	//fmt.Println(ss.Click())
-
-	//n := a.DescMatches("^.*,搜索,点击跳转到搜索激活页").FindOnce()
-	//n.Click()
-	//a.ClassName("android.widget.EditText").FindOnce().Click()
-	for i := 0; i < 40; i++ {
-		ss := a.ClassName("android.widget.EditText").FindOnce()
-		if ss != nil {
-			ss.SetText("纯流量")
+	success := app.Launch("com.taobao.idlefish")
+	if !success {
+		log.Println("app不存在")
+		return
+	}
+	for i := 0; i < 200; i++ {
+		n := a.DescMatches("^.*,搜索,点击跳转到搜索激活页").FindOnce()
+		if n != nil {
+			n.Click()
+			break
 		}
 	}
-	a.Desc("搜索").FindOnce().Click()
+
+	for i := 0; i < 200; i++ {
+		once := a.ClassName("android.widget.EditText").FindOnce()
+		if once != nil {
+			once.Click()
+			once.SetText("手机")
+			a.Desc("搜索").FindOnce().Click()
+			break
+		}
+	}
+	for i := 0; i < 200; i++ {
+		av := a.Text("包邮").FindOnce()
+		if av != nil {
+			av.Click()
+		}
+	}
+
+	//for i := 0; i < 10; i++ {
+	//	once2 := a.ClassName("androidx.viewpager.widget.ViewPager").FindOnce()
+	//	if once2 != nil {
+	//		fmt.Println(once2.ToString())
+	//		for _, object := range once2.GetChildren() {
+	//			//打印节点信息
+	//			fmt.Println(object.ToString())
+	//			if object.GetClickable() {
+	//				object.Click()
+	//				return
+	//			}
+	//		}
+	//	}
+	//}
 
 	//fmt.Println(a.ClassName("android.widget.TextView").Find())
 	//f := a.ClassName("android.widget.LinearLayout").FindOnce().Click()
