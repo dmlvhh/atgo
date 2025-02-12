@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/Dasongzi1366/AutoGo/app"
+	"github.com/Dasongzi1366/AutoGo/ime"
 	"github.com/Dasongzi1366/AutoGo/uiacc"
 	"log"
 )
@@ -25,18 +27,81 @@ func main() {
 		once := a.ClassName("android.widget.EditText").FindOnce()
 		if once != nil {
 			once.Click()
-			once.SetText("手机")
+			once.SetText("脚本定制")
 			a.Desc("搜索").FindOnce().Click()
 			break
 		}
 	}
-	for i := 0; i < 200; i++ {
-		av := a.Text("包邮").FindOnce()
-		if av != nil {
-			av.Click()
+
+	for i := 0; i < 100; i++ {
+		once := a.ClassName("androidx.recyclerview.widget.RecyclerView").FindOnce()
+		if once != nil {
+			fmt.Println("once", once.ToString())
+			for _, object := range once.GetChildren() {
+				//fmt.Println(object.ToString())
+				if object.ToString() != "" {
+					children := object.GetChildren()
+					//fmt.Println("ccccc", children)
+					for _, child := range children {
+						fmt.Println("child", child.ToString())
+						fmt.Println(child.ClickCenter())
+
+						for i := 0; i < 10; i++ {
+							aaa := a.DescStartsWith("在售").FindOnce()
+							if aaa != nil {
+								fmt.Println("在售", aaa.ToString())
+								aaa.ClickCenter()
+							}
+						}
+
+						for i := 0; i < 100; i++ {
+							ss := a.DescStartsWith("商品价格").FindOnce()
+							if ss != nil {
+								ss.ClickCenter()
+								fmt.Println("2222", ss.ToString())
+
+								for i := 0; i < 100; i++ {
+									bb := a.DescStartsWith("聊一聊").FindOnce()
+									if bb != nil {
+										bb.ClickCenter()
+										fmt.Println("3333", bb.ToString())
+
+									}
+								}
+								for i := 0; i < 100; i++ {
+									bb := a.DescStartsWith("我想要").FindOnce()
+									if bb != nil {
+										bb.ClickCenter()
+										fmt.Println("3333", bb.ToString())
+									}
+								}
+								for i := 0; i < 5; i++ {
+									dd := a.DescStartsWith("想跟TA说点什么...").FindOnce()
+									if dd != nil {
+										fmt.Println("想跟TA说点什么", dd.ToString())
+										dd.Click()
+										ime.InputText("你好")
+									}
+								}
+								for i := 0; i < 5; i++ {
+									fmt.Println("key")
+									ime.KeyAction(0)
+								}
+							}
+						}
+
+					}
+				}
+			}
 		}
 	}
-
+	for i := 0; i < 5; i++ {
+		gg := a.DescStartsWith("发送").FindOnce()
+		if gg != nil {
+			fmt.Println("gg", gg.ToString())
+			gg.Click()
+		}
+	}
 	//for i := 0; i < 10; i++ {
 	//	once2 := a.ClassName("androidx.viewpager.widget.ViewPager").FindOnce()
 	//	if once2 != nil {
@@ -78,22 +143,5 @@ func main() {
 	//		return
 	//	}
 	//
-	//	//节点不能点击的情况下循环3次判断父节点是否可以点击,如果可以点击就点击后跳出
-	//	for i := 0; i < 3; i++ {
-	//		obj = obj.GetParent()
-	//
-	//		//打印节点信息
-	//		fmt.Println(obj.ToString())
-	//
-	//		if obj.GetClickable() {
-	//			obj.Click()
-	//			return
-	//		}
-	//	}
-	//
-	//} else {
-	//	fmt.Println("没有找到")
-	//}
 
-	//setText()
 }
